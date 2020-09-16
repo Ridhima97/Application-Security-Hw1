@@ -3,7 +3,7 @@ before_install:
 language: c
 compiler: gcc
 script: 
-  make test
+  make 
           
 #notifications:
    #email:
