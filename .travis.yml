@@ -2,8 +2,9 @@ before_install:
   - sudo apt-get install check
 language: c
 compiler: gcc
-script:
+script: 
   - make
+  - make test
           
 notifications:
    email:
