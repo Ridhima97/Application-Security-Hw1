@@ -3,10 +3,9 @@ before_install:
 language: c
 compiler: gcc
 script: 
-  - make
-  - make test
+  make test
           
-notifications:
-   email:
-    - ridhima.agarwal@nyu.edu
+#notifications:
+   #email:
+    #- ridhima.agarwal@nyu.edu
    
