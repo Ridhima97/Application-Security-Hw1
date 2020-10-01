@@ -38,6 +38,7 @@ void animate(char *msg, unsigned char *program) {
                 mptr += (char)arg1;
                 break;
             case 0x04:
+                if(arg2>16) break;
                 regs[arg2] = arg1;
                 break;
             case 0x05:
@@ -54,10 +55,10 @@ void animate(char *msg, unsigned char *program) {
             case 0x08:
                 goto done;
             case 0x09:
-                pc += (char)arg1;
+                pc += (unsigned char)arg1;
                 break;
             case 0x10:
-                if (zf) pc += (char)arg1;
+                if (zf) pc += (unsigned char)arg1;
                 break;
         }
         pc+=3;
@@ -65,6 +66,23 @@ void animate(char *msg, unsigned char *program) {
     }
 done:
     return;
+}
+
+int get_gift_card_value(struct this_gift_card *thisone) {
+    struct gift_card_data *gcd_ptr;
+    struct gift_card_record_data *gcrd_ptr;
+    struct gift_card_amount_change *gcac_ptr;
+    int ret_count = 0;
+
+    gcd_ptr = thisone->gift_card_data;
+    for(int i=0;i<gcd_ptr->number_of_gift_card_records; i++) {
+        gcrd_ptr = (struct gift_card_record_data *) gcd_ptr->gift_card_record_data[i];
+        if (gcrd_ptr->type_of_record == 1) {
+            gcac_ptr = gcrd_ptr->actual_record;
+            ret_count += gcac_ptr->amount_added;
+        }   
+    }
+    return ret_count;
 }
 
 void print_gift_card_info(struct this_gift_card *thisone) {
@@ -152,22 +170,6 @@ void gift_card_json(struct this_gift_card *thisone) {
     printf("}\n");
 }
 
-int get_gift_card_value(struct this_gift_card *thisone) {
-	struct gift_card_data *gcd_ptr;
-	struct gift_card_record_data *gcrd_ptr;
-	struct gift_card_amount_change *gcac_ptr;
-	int ret_count = 0;
-
-	gcd_ptr = thisone->gift_card_data;
-	for(int i=0;i<gcd_ptr->number_of_gift_card_records; i++) {
-  		gcrd_ptr = (struct gift_card_record_data *) gcd_ptr->gift_card_record_data[i];
-		if (gcrd_ptr->type_of_record == 1) {
-			gcac_ptr = gcrd_ptr->actual_record;
-			ret_count += gcac_ptr->amount_added;
-		}	
-	}
-	return ret_count;
-}
 
 
 
@@ -185,7 +187,9 @@ struct this_gift_card *gift_card_reader(FILE *input_fd) {
 		struct gift_card_data *gcd_ptr;
 		/* JAC: Why aren't return types checked? */
 		fread(&ret_val->num_bytes, 4,1, input_fd);
-
+        if(ret_val->num_bytes < 0) {
+            exit(0);
+        } 
 		// Make something the size of the rest and read it in
 		ptr = malloc(ret_val->num_bytes);
 		fread(ptr, ret_val->num_bytes, 1, input_fd);

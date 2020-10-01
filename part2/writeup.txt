@@ -1,0 +1,33 @@
+Bug writeup 
+(Part 2)
+
+
+Bug 1: 
+
+The first bug, crash1.gft, makes use of a weakness in function animate(char *, unsigned char *). Here, I use specially crafted values to over-write the return register (rip) used for the program parameter. This makes the function unable to return, and causes a Segmentation Fault. Even though the regs paremeter is only supposed to be 16 bytes, I was able to push past bounds and cross the distance between the arg2 value and the rip (40 bytes, as observed). This bug is specific to case 0x04 of the switch case.
+
+Fix: 
+A check is now done for case 0x04 prior to doing regs[arg2]=arg1 for the value of arg2. This ensures that regs is unable to access memory past the 16 bytes limit, and the rip remains safe. 
+
+
+
+--------
+
+Bug 2:
+
+The second bug submitted, i.e crash2.gft, exploits a vulnerability found in the function giftcardreader(FILE *). This crash occurs since the return value of ret_val->num_bytes is not checked after using it in fread, causing malloc to fail when we use it to allocate memory for ptr (negative memory cannot be allocated). 
+
+Fix:
+
+I validated the value of ret_val->num_bytes by checking if it is positive or negative after fread() returns for each iteration of the while loop. If it is negative, I exit the program immediately, avoiding the possibility of the error.
+
+--------
+
+Bug 3:
+
+The third bug, hang.gft, occurs in the animate(char *, unsigned char *) function as well. Here, the end of the switch cases performs the pc+=3 action, and even though pc is initiliazed as an unsigned char, in several switch cases(cases 0x09 and 0x10) it is typecast as a char. This allows us to pass a negative number for pc. This makes the program switch between the same 2 values of pc and as a result, the condition at the end, (pc > program+256) never becomes true, and the program hangs indefinitely. 
+
+Fix:
+The occurrences of char in switch cases 0x09 and 0x10 is replaced with unsigned char to prevent this error. 
+
+
