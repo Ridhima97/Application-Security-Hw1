@@ -1,0 +1,15 @@
+Bug Writeup
+(Part 3)
+
+
+Bug 1: The first bug found was on the first crash in the 'crashes' directory, now the fuzzer1.gft. This generated an "Abort Trap:6" error. The error was being generated from the animate function, in the switch case 0x05. I found that the regs variable was trying to access memory that was not owned/allocated to the program. This was occurring because the arg1 and arg2 had been made longer than 16 bytes, and had crossed the bounds.
+
+Fix: To fix this, I added an if condition inside the switch case that checked the length, and if it was more than 16 bytes, the loop was exited. 
+
+----------
+
+Bug 2: The second bug was the 23rd crash in the 'crashes' directory, now named fuzzer2.gft. This generated a Segmentation Fault:11 error. Here, the program crashed while generating the 'msg' value inside the animate function in the switch cases 0x02 and 0x03. Since arg1 was out of bounds, there was an error while loading its char value into mptr.
+
+Fix: I added a check for that, making sure that the value passed to mptr is a proper char value of 16 bytes maximum. This ensures that msg gets a proper value and does not crash.
+
+----------
