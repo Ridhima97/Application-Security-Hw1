@@ -34,7 +34,7 @@ fuzzer2: part3/fuzzer2.gft
 
 fuzzertests: test1 test2 test3 test4 test5 test6 test7 test8 test9 test10 test11 test12 test13 test14 test15 test16 test17 test18 test19 test20 test21 test22 test23 test24 test25 
 
-fuzzertests2: test26 test27 test28 test29 test30 test31 test32 test33 test34 test35 test36 test37 test38 test39 test40 
+fuzzertests2: test26 test27 test28 test29 test30 test31 test32 test33 test34 test35 test36 test37 test38 test40 
 
 test1: 
 	gcc -o giftcardreader giftcardreader.c && ./giftcardreader 1 afl_reduced/id:000009,src:000000,op:flip1,pos:68
@@ -188,12 +188,5 @@ test38:
 	gcc -o giftcardreader giftcardreader.c && ./giftcardreader 1 afl_reduced/id:000143,src:000091,op:havoc,rep:128
 
 
-test39: 
-	gcc -o giftcardreader giftcardreader.c && ./giftcardreader 1 afl_reduced/id:000150,src:000118,op:havoc,rep:128
-
-
 test40: 
 	gcc -o giftcardreader giftcardreader.c && ./giftcardreader 1 afl_reduced/id:000156,src:000118,op:havoc,rep:32
-
-
-
