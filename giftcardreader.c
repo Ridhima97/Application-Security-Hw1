@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <strings.h>
+#include <string.h>
 
 // interpreter for THX-1138 assembly
 void animate(char *msg, unsigned char *program) {
