@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <strings.h>
 #include <string.h>
-
+//added
 // interpreter for THX-1138 assembly
 void animate(char *msg, unsigned char *program) {
     unsigned char regs[16];
