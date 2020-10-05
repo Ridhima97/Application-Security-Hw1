@@ -3,7 +3,7 @@ before_install:
 language: c
 compiler: gcc
 script: 
-  make all 
+  make all && make part3 
 email:
   - ridhima.agarwal@nyu.edu
    

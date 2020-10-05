@@ -14,6 +14,7 @@ crash2: part2/crash2.gft
 hang: part2/hang.gft
 	gcc -o giftcardreader giftcardreader.c && ./giftcardreader 1 part2/hang.gft
 
+part3: cov1 cov2 fuzzer1 fuzzer2
 
 cov1: part3/cov1.gft
 	gcc -o giftcardreader giftcardreader.c && ./giftcardreader 1 part3/cov1.gft
