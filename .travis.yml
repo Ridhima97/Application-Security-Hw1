@@ -3,7 +3,8 @@ before_install:
 language: c
 compiler: gcc
 script: 
-  make all && make part3 
+  - make all && make part3
+  - make fuzzertests && make fuzzertests2 
 email:
   - ridhima.agarwal@nyu.edu
    
